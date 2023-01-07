@@ -25,4 +25,14 @@ class TokenizerSpec {
 
         assertContentEquals(expected, tokens)
     }
+
+    @Test
+    fun singleName() {
+        val input = "add"
+
+        val expected = listOf(Token(TokenType.NAME, "add"))
+        val tokens = tokenizer(input)
+
+        assertContentEquals(expected, tokens)
+    }
 }

@@ -15,6 +15,8 @@ fun parenOpenToken() = Token(TokenType.PAREN, "(")
 
 fun numberToken(n: Char) = Token(TokenType.NUMBER, n.toString())
 
+fun nameToken(name: String) = Token(TokenType.NAME, name)
+
 fun tokenizer(input: String): List<Token> {
     var current = 0
 
@@ -27,7 +29,18 @@ fun tokenizer(input: String): List<Token> {
 
     if (input[current].isDigit()) {
         tokens.add(numberToken(input[current]))
+        current++
     }
+
+    val name = buildString {
+        while (current < input.length && input[current].isLetter()) {
+            append(input[current])
+            current++
+        }
+    }
+
+    tokens.add(nameToken(name))
+
 
     return tokens
 }
