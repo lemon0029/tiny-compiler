@@ -11,6 +11,10 @@ data class Token(
     val value: String,
 )
 
+fun Token.isOpenParentheses() = type == TokenType.PARENTHESES && value == "("
+
+fun Token.isCloseParentheses() = type == TokenType.PARENTHESES && value == ")"
+
 fun parenOpenToken() = Token(TokenType.PARENTHESES, "(")
 
 fun parenCloseToken() = Token(TokenType.PARENTHESES, ")")
@@ -36,15 +40,13 @@ fun tokenizer(input: String): List<Token> {
         } else if (input[current].isDigit()) {
             tokens.add(numberToken(buildString {
                 while (current < input.length && input[current].isDigit()) {
-                    append(input[current])
-                    current++
+                    append(input[current++])
                 }
             }))
         } else {
             tokens.add(nameToken(buildString {
                 while (current < input.length && input[current].isLetter()) {
-                    append(input[current])
-                    current++
+                    append(input[current++])
                 }
             }))
         }

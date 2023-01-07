@@ -2,6 +2,8 @@ package tiny.compiler.parser
 
 import tiny.compiler.tokenizer.Token
 import tiny.compiler.tokenizer.TokenType
+import tiny.compiler.tokenizer.isCloseParentheses
+import tiny.compiler.tokenizer.isOpenParentheses
 
 enum class NodeType {
     PROGRAM,
@@ -35,15 +37,13 @@ fun parser(tokens: List<Token>): ProgramNode {
             return NumericLiteralNode(token.value)
         }
 
-        if (token.type == TokenType.PARENTHESES && token.value == "(") {
-            token = tokens[++current]
-
-            val callExpressionNode = CallExpressionNode(token.value)
+        if (token.isOpenParentheses()) {
+            val callExpressionNode = CallExpressionNode(tokens[++current].value)
 
             token = tokens[++current]
 
             while (true) {
-                if (token.type == TokenType.PARENTHESES && token.value == ")") {
+                if (token.isCloseParentheses()) {
                     current++
                     break
                 }
