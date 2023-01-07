@@ -8,10 +8,19 @@ class TokenizerSpec {
 
     @Test
     fun singleParenOpen() {
-        val expected = listOf(Token(TokenType.PAREN, "("))
-
         val input = "("
 
+        val expected = listOf(Token(TokenType.PAREN, "("))
+        val tokens = tokenizer(input)
+
+        assertContentEquals(expected, tokens)
+    }
+
+    @Test
+    fun singleNumber() {
+        val input = "1"
+
+        val expected = listOf(Token(TokenType.NUMBER, "1"))
         val tokens = tokenizer(input)
 
         assertContentEquals(expected, tokens)
