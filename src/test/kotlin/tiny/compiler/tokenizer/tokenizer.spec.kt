@@ -17,6 +17,18 @@ class TokenizerSpec {
     }
 
     @Test
+    fun singleParenClose() {
+        val input = ")"
+
+        val expected = listOf(Token(TokenType.PAREN, ")"))
+        val tokens = tokenizer(input)
+
+        tokens.forEach(::println)
+
+        assertContentEquals(expected, tokens)
+    }
+
+    @Test
     fun singleNumber() {
         val input = "1"
 
