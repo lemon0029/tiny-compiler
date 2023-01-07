@@ -13,7 +13,10 @@ open class Node(val type: NodeType)
 
 class ProgramNode(val body: MutableList<Node> = mutableListOf()) : Node(NodeType.PROGRAM)
 
-class CallExpressionNode(name: String, params: MutableList<NumericLiteralNode>) : Node(NodeType.CALL_EXPRESSION)
+class CallExpressionNode(
+    val name: String,
+    val params: MutableList<NumericLiteralNode> = mutableListOf()
+) : Node(NodeType.CALL_EXPRESSION)
 
 class NumericLiteralNode(val value: String) : Node(NodeType.NUMERIC_LITERAL)
 
@@ -27,6 +30,18 @@ fun parser(tokens: List<Token>): ProgramNode {
         programNode.body.add(
             NumericLiteralNode(tokens[current].value)
         )
+    }
+
+    if (tokens[current].type == TokenType.PARENTHESES && tokens[current].value == "(") {
+        val callExpressionNode = CallExpressionNode(tokens[++current].value)
+
+        while (tokens[++current].type == TokenType.NUMBER) {
+            callExpressionNode.params.add(
+                NumericLiteralNode(tokens[current].value)
+            )
+        }
+
+        programNode.body.add(callExpressionNode)
     }
 
     return programNode
