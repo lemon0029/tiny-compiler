@@ -15,7 +15,7 @@ class ProgramNode(val body: MutableList<Node> = mutableListOf()) : Node(NodeType
 
 class CallExpressionNode(
     val name: String,
-    val params: MutableList<NumericLiteralNode> = mutableListOf()
+    val params: MutableList<Node> = mutableListOf()
 ) : Node(NodeType.CALL_EXPRESSION)
 
 class NumericLiteralNode(val value: String) : Node(NodeType.NUMERIC_LITERAL)
@@ -24,25 +24,41 @@ class NumericLiteralNode(val value: String) : Node(NodeType.NUMERIC_LITERAL)
 fun parser(tokens: List<Token>): ProgramNode {
     val programNode = ProgramNode()
 
+    if (tokens.isEmpty()) return programNode
+
     var current = 0
 
-    if (tokens[current].type == TokenType.NUMBER) {
-        programNode.body.add(
-            NumericLiteralNode(tokens[current].value)
-        )
-    }
-
-    if (tokens[current].type == TokenType.PARENTHESES && tokens[current].value == "(") {
-        val callExpressionNode = CallExpressionNode(tokens[++current].value)
-
-        while (tokens[++current].type == TokenType.NUMBER) {
-            callExpressionNode.params.add(
-                NumericLiteralNode(tokens[current].value)
-            )
+    fun walk(): Node {
+        var token = tokens[current]
+        if (token.type == TokenType.NUMBER) {
+            current++
+            return NumericLiteralNode(token.value)
         }
 
-        programNode.body.add(callExpressionNode)
+        if (token.type == TokenType.PARENTHESES && token.value == "(") {
+            token = tokens[++current]
+
+            val callExpressionNode = CallExpressionNode(token.value)
+
+            token = tokens[++current]
+
+            while (true) {
+                if (token.type == TokenType.PARENTHESES && token.value == ")") {
+                    current++
+                    break
+                }
+
+                callExpressionNode.params.add(walk())
+                token = tokens[current]
+            }
+
+            return callExpressionNode
+        }
+
+        throw IllegalArgumentException("Token type: ${token.type}")
     }
+
+    programNode.body.add(walk())
 
     return programNode
 }
