@@ -1,7 +1,7 @@
 package tiny.compiler.tokenizer
 
 enum class TokenType {
-    PAREN,
+    PARENTHESES,
     NAME,
     NUMBER,
 }
@@ -11,11 +11,11 @@ data class Token(
     val value: String,
 )
 
-fun parenOpenToken() = Token(TokenType.PAREN, "(")
+fun parenOpenToken() = Token(TokenType.PARENTHESES, "(")
 
-fun parenCloseToken()= Token(TokenType.PAREN, ")")
+fun parenCloseToken() = Token(TokenType.PARENTHESES, ")")
 
-fun numberToken(n: Char) = Token(TokenType.NUMBER, n.toString())
+fun numberToken(n: String) = Token(TokenType.NUMBER, n)
 
 fun nameToken(name: String) = Token(TokenType.NAME, name)
 
@@ -27,35 +27,27 @@ fun tokenizer(input: String): List<Token> {
     while (current < input.length) {
         if (input[current].isWhitespace()) {
             current++
-            continue
-        }
-
-        if (input[current] == '(') {
+        } else if (input[current] == '(') {
             tokens.add(parenOpenToken())
             current++
-            continue
-        }
-
-        if (input[current] == ')') {
+        } else if (input[current] == ')') {
             tokens.add(parenCloseToken())
             current++
-            continue
+        } else if (input[current].isDigit()) {
+            tokens.add(numberToken(buildString {
+                while (current < input.length && input[current].isDigit()) {
+                    append(input[current])
+                    current++
+                }
+            }))
+        } else {
+            tokens.add(nameToken(buildString {
+                while (current < input.length && input[current].isLetter()) {
+                    append(input[current])
+                    current++
+                }
+            }))
         }
-
-        if (input[current].isDigit()) {
-            tokens.add(numberToken(input[current]))
-            current++
-            continue
-        }
-
-        val name = buildString {
-            while (current < input.length && input[current].isLetter()) {
-                append(input[current])
-                current++
-            }
-        }
-
-        tokens.add(nameToken(name))
     }
 
     return tokens

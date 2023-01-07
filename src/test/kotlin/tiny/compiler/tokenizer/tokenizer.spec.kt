@@ -10,7 +10,7 @@ class TokenizerSpec {
     fun singleParenOpen() {
         val input = "("
 
-        val expected = listOf(Token(TokenType.PAREN, "("))
+        val expected = listOf(Token(TokenType.PARENTHESES, "("))
         val tokens = tokenizer(input)
 
         assertContentEquals(expected, tokens)
@@ -20,10 +20,8 @@ class TokenizerSpec {
     fun singleParenClose() {
         val input = ")"
 
-        val expected = listOf(Token(TokenType.PAREN, ")"))
+        val expected = listOf(Token(TokenType.PARENTHESES, ")"))
         val tokens = tokenizer(input)
-
-        tokens.forEach(::println)
 
         assertContentEquals(expected, tokens)
     }
@@ -33,6 +31,16 @@ class TokenizerSpec {
         val input = "1"
 
         val expected = listOf(Token(TokenType.NUMBER, "1"))
+        val tokens = tokenizer(input)
+
+        assertContentEquals(expected, tokens)
+    }
+
+    @Test
+    fun singleNumber2() {
+        val input = "190"
+
+        val expected = listOf(Token(TokenType.NUMBER, "190"))
         val tokens = tokenizer(input)
 
         assertContentEquals(expected, tokens)
@@ -53,11 +61,31 @@ class TokenizerSpec {
         val input = "(add 2 3)"
 
         val expected = listOf(
-            Token(TokenType.PAREN, "("),
+            Token(TokenType.PARENTHESES, "("),
             Token(TokenType.NAME, "add"),
             Token(TokenType.NUMBER, "2"),
             Token(TokenType.NUMBER, "3"),
-            Token(TokenType.PAREN, ")"),
+            Token(TokenType.PARENTHESES, ")"),
+        )
+        val tokens = tokenizer(input)
+
+        assertContentEquals(expected, tokens)
+    }
+
+    @Test
+    fun fullParenAndNameAndNumber() {
+        val input = "(add 2 (subtract 41 2))"
+
+        val expected = listOf(
+            Token(TokenType.PARENTHESES, "("),
+            Token(TokenType.NAME, "add"),
+            Token(TokenType.NUMBER, "2"),
+            Token(TokenType.PARENTHESES, "("),
+            Token(TokenType.NAME, "subtract"),
+            Token(TokenType.NUMBER, "41"),
+            Token(TokenType.NUMBER, "2"),
+            Token(TokenType.PARENTHESES, ")"),
+            Token(TokenType.PARENTHESES, ")"),
         )
         val tokens = tokenizer(input)
 
