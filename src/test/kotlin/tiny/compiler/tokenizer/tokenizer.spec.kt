@@ -47,4 +47,20 @@ class TokenizerSpec {
 
         assertContentEquals(expected, tokens)
     }
+
+    @Test
+    fun simpleParenAndNameAndNumber() {
+        val input = "(add 2 3)"
+
+        val expected = listOf(
+            Token(TokenType.PAREN, "("),
+            Token(TokenType.NAME, "add"),
+            Token(TokenType.NUMBER, "2"),
+            Token(TokenType.NUMBER, "3"),
+            Token(TokenType.PAREN, ")"),
+        )
+        val tokens = tokenizer(input)
+
+        assertContentEquals(expected, tokens)
+    }
 }

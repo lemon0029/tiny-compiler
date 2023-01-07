@@ -25,6 +25,11 @@ fun tokenizer(input: String): List<Token> {
     val tokens = mutableListOf<Token>()
 
     while (current < input.length) {
+        if (input[current].isWhitespace()) {
+            current++
+            continue
+        }
+
         if (input[current] == '(') {
             tokens.add(parenOpenToken())
             current++
