@@ -1,6 +1,9 @@
-package tiny.compiler.tokenizer
+package tiny.compiler.parsing
 
 import org.junit.jupiter.api.Test
+import tiny.compiler.tokenizer.Token
+import tiny.compiler.tokenizer.TokenType
+import tiny.compiler.tokenizer.tokenizer
 import kotlin.test.assertContentEquals
 
 
