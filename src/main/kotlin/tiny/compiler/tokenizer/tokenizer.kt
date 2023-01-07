@@ -15,13 +15,17 @@ fun Token.isOpenParentheses() = type == TokenType.PARENTHESES && value == "("
 
 fun Token.isCloseParentheses() = type == TokenType.PARENTHESES && value == ")"
 
-fun parenOpenToken() = Token(TokenType.PARENTHESES, "(")
+fun buildOpenParenthesesToken() = Token(TokenType.PARENTHESES, "(")
 
-fun parenCloseToken() = Token(TokenType.PARENTHESES, ")")
+fun buildCloseParenthesesToken() = Token(TokenType.PARENTHESES, ")")
 
-fun numberToken(n: String) = Token(TokenType.NUMBER, n)
+fun buildNumberToken(n: String) = Token(TokenType.NUMBER, n)
 
-fun nameToken(name: String) = Token(TokenType.NAME, name)
+fun buildNameToken(name: String) = Token(TokenType.NAME, name)
+
+fun Char.isOpenParentheses() = this == '('
+
+fun Char.isCloseParentheses() = this == ')'
 
 fun tokenizer(input: String): List<Token> {
     var current = 0
@@ -31,20 +35,32 @@ fun tokenizer(input: String): List<Token> {
     while (current < input.length) {
         if (input[current].isWhitespace()) {
             current++
-        } else if (input[current] == '(') {
-            tokens.add(parenOpenToken())
+            continue
+        }
+
+        if (input[current].isOpenParentheses()) {
+            tokens.add(buildOpenParenthesesToken())
             current++
-        } else if (input[current] == ')') {
-            tokens.add(parenCloseToken())
+            continue
+        }
+
+        if (input[current].isCloseParentheses()) {
+            tokens.add(buildCloseParenthesesToken())
             current++
-        } else if (input[current].isDigit()) {
-            tokens.add(numberToken(buildString {
+            continue
+        }
+
+        if (input[current].isDigit()) {
+            tokens.add(buildNumberToken(buildString {
                 while (current < input.length && input[current].isDigit()) {
                     append(input[current++])
                 }
             }))
-        } else {
-            tokens.add(nameToken(buildString {
+            continue
+        }
+
+        if (input[current].isLetter()) {
+            tokens.add(buildNameToken(buildString {
                 while (current < input.length && input[current].isLetter()) {
                     append(input[current++])
                 }
