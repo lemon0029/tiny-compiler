@@ -5,19 +5,19 @@ import kotlin.reflect.KClass
 
 fun traverse(programNode: ProgramNode, visitors: Map<KClass<out Node>, Visitor>) {
 
-    fun traverseNode(node: Node) {
+    fun traverseNode(node: Node, parent: Node?) {
         val visitor = visitors[node::class]
 
-        visitor?.enter(node)
+        visitor?.enter(node, parent)
 
         when (node) {
-            is ProgramNode -> node.body.forEach(::traverseNode)
-            is CallExpressionNode -> node.params.forEach(::traverseNode)
+            is ProgramNode -> node.body.forEach { traverseNode(it, node) }
+            is CallExpressionNode -> node.params.forEach { traverseNode(it, node) }
             is NumericLiteralNode -> {}
         }
 
-        visitor?.exit(node)
+        visitor?.exit(node, parent)
     }
 
-    traverseNode(programNode)
+    traverseNode(programNode, null)
 }
