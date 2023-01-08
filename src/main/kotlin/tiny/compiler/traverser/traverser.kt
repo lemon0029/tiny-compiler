@@ -16,7 +16,9 @@ fun traverse(programNode: ProgramNode, visitors: Map<KClass<out Node>, Visitor>)
             is NumericLiteralNode -> {}
         }
 
-        visitor?.exit(node, parent)
+        try {
+            visitor?.exit(node, parent)
+        } catch (_: NotImplementedError) {}
     }
 
     traverseNode(programNode, null)

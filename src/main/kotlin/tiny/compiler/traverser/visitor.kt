@@ -8,7 +8,7 @@ abstract class Visitor {
 
     abstract fun enter(node: Node, parent: Node?)
 
-    abstract fun exit(node: Node, parent: Node?)
+    open fun exit(node: Node, parent: Node?): Unit = TODO("Not yet implemented")
 
 }
 

@@ -3,17 +3,29 @@ package tiny.compiler.parser
 enum class NodeType {
     PROGRAM,
     CALL_EXPRESSION,
-    NUMERIC_LITERAL
+    NUMERIC_LITERAL,
+    EXPRESSION_STATEMENT,
+    IDENTIFIER
 }
 
 open class Node(val type: NodeType)
 
-class ProgramNode(val body: MutableList<Node> = mutableListOf()) : Node(NodeType.PROGRAM)
+class ExpressionStatementNode(val expression: CallExpressionNode) : Node(NodeType.EXPRESSION_STATEMENT)
+
+class IdentifierNode(val name: String) : Node(NodeType.IDENTIFIER)
+
+class ProgramNode(val body: MutableList<Node> = mutableListOf()) : Node(NodeType.PROGRAM) {
+    lateinit var context: MutableList<Node>
+}
 
 class CallExpressionNode(
-    val name: String,
-    val params: MutableList<Node> = mutableListOf()
-) : Node(NodeType.CALL_EXPRESSION)
+    val name: String? = null,
+    val params: MutableList<Node> = mutableListOf(),
+    val arguments: MutableList<Node> = mutableListOf(),
+    val callee: IdentifierNode? = null
+) : Node(NodeType.CALL_EXPRESSION) {
+    lateinit var context: MutableList<Node>
+}
 
 class NumericLiteralNode(val value: String) : Node(NodeType.NUMERIC_LITERAL)
 
