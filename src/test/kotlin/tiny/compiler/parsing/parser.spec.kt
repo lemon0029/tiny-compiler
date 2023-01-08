@@ -4,9 +4,9 @@ import org.junit.jupiter.api.Test
 import tiny.compiler.parser.CallExpressionNode
 import tiny.compiler.parser.NodeType
 import tiny.compiler.parser.NumericLiteralNode
-import tiny.compiler.parser.parser
-import tiny.compiler.tokenizer.Token
-import tiny.compiler.tokenizer.TokenType
+import tiny.compiler.parser.parse
+import tiny.compiler.parser.Token
+import tiny.compiler.parser.TokenType
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -16,7 +16,7 @@ class ParserSpec {
     fun emptyAST() {
         val tokens = listOf<Token>()
 
-        val programNode = parser(tokens)
+        val programNode = parse(tokens)
 
         assertEquals(NodeType.PROGRAM, programNode.type)
         assertTrue { programNode.body.isEmpty() }
@@ -26,7 +26,7 @@ class ParserSpec {
     fun singleNumberAST() {
         val tokens = mutableListOf(Token(TokenType.NUMBER, "23"))
 
-        val programNode = parser(tokens)
+        val programNode = parse(tokens)
 
         assertTrue { programNode.body.size == 1 }
         assertTrue {
@@ -45,7 +45,7 @@ class ParserSpec {
             Token(TokenType.PARENTHESES, ")"),
         )
 
-        val programNode = parser(tokens)
+        val programNode = parse(tokens)
 
         assertTrue { programNode.body.size == 1 && programNode.body.first() is CallExpressionNode }
 
@@ -71,7 +71,7 @@ class ParserSpec {
             Token(TokenType.PARENTHESES, ")"),
         )
 
-        val programNode = parser(tokens)
+        val programNode = parse(tokens)
 
         assertTrue { programNode.body.size == 1 && programNode.body.first() is CallExpressionNode }
         (programNode.body.first() as CallExpressionNode).apply {

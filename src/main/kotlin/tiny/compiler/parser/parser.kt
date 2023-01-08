@@ -1,10 +1,5 @@
 package tiny.compiler.parser
 
-import tiny.compiler.tokenizer.Token
-import tiny.compiler.tokenizer.TokenType
-import tiny.compiler.tokenizer.isCloseParentheses
-import tiny.compiler.tokenizer.isOpenParentheses
-
 enum class NodeType {
     PROGRAM,
     CALL_EXPRESSION,
@@ -23,7 +18,7 @@ class CallExpressionNode(
 class NumericLiteralNode(val value: String) : Node(NodeType.NUMERIC_LITERAL)
 
 
-fun parser(tokens: List<Token>): ProgramNode {
+fun parse(tokens: List<Token>): ProgramNode {
     val programNode = ProgramNode()
 
     if (tokens.isEmpty()) return programNode

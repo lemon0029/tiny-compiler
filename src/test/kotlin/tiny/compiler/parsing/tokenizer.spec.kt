@@ -1,9 +1,9 @@
 package tiny.compiler.parsing
 
 import org.junit.jupiter.api.Test
-import tiny.compiler.tokenizer.Token
-import tiny.compiler.tokenizer.TokenType
-import tiny.compiler.tokenizer.tokenizer
+import tiny.compiler.parser.Token
+import tiny.compiler.parser.TokenType
+import tiny.compiler.parser.tokenize
 import kotlin.test.assertContentEquals
 
 
@@ -14,7 +14,7 @@ class TokenizerSpec {
         val input = "("
 
         val expected = listOf(Token(TokenType.PARENTHESES, "("))
-        val tokens = tokenizer(input)
+        val tokens = tokenize(input)
 
         assertContentEquals(expected, tokens)
     }
@@ -24,7 +24,7 @@ class TokenizerSpec {
         val input = ")"
 
         val expected = listOf(Token(TokenType.PARENTHESES, ")"))
-        val tokens = tokenizer(input)
+        val tokens = tokenize(input)
 
         assertContentEquals(expected, tokens)
     }
@@ -34,7 +34,7 @@ class TokenizerSpec {
         val input = "1"
 
         val expected = listOf(Token(TokenType.NUMBER, "1"))
-        val tokens = tokenizer(input)
+        val tokens = tokenize(input)
 
         assertContentEquals(expected, tokens)
     }
@@ -44,7 +44,7 @@ class TokenizerSpec {
         val input = "190"
 
         val expected = listOf(Token(TokenType.NUMBER, "190"))
-        val tokens = tokenizer(input)
+        val tokens = tokenize(input)
 
         assertContentEquals(expected, tokens)
     }
@@ -54,7 +54,7 @@ class TokenizerSpec {
         val input = "add"
 
         val expected = listOf(Token(TokenType.NAME, "add"))
-        val tokens = tokenizer(input)
+        val tokens = tokenize(input)
 
         assertContentEquals(expected, tokens)
     }
@@ -70,7 +70,7 @@ class TokenizerSpec {
             Token(TokenType.NUMBER, "3"),
             Token(TokenType.PARENTHESES, ")"),
         )
-        val tokens = tokenizer(input)
+        val tokens = tokenize(input)
 
         assertContentEquals(expected, tokens)
     }
@@ -90,7 +90,7 @@ class TokenizerSpec {
             Token(TokenType.PARENTHESES, ")"),
             Token(TokenType.PARENTHESES, ")"),
         )
-        val tokens = tokenizer(input)
+        val tokens = tokenize(input)
 
         assertContentEquals(expected, tokens)
     }

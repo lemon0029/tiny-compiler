@@ -1,4 +1,4 @@
-package tiny.compiler.tokenizer
+package tiny.compiler.parser
 
 enum class TokenType {
     PARENTHESES,
@@ -27,7 +27,7 @@ fun Char.isOpenParentheses() = this == '('
 
 fun Char.isCloseParentheses() = this == ')'
 
-fun tokenizer(input: String): List<Token> {
+fun tokenize(input: String): List<Token> {
     var current = 0
 
     val tokens = mutableListOf<Token>()
