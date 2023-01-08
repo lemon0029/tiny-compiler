@@ -65,7 +65,9 @@ fun parse(tokens: List<Token>): ProgramNode {
         throw IllegalArgumentException("Token type: ${token.type}")
     }
 
-    programNode.body.add(walk())
+    while (current < tokens.size) {
+        programNode.body.add(walk())
+    }
 
     return programNode
 }

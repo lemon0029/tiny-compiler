@@ -86,4 +86,67 @@ class ParserSpec {
             }
         }
     }
+
+    @Test
+    fun fullAST1() {
+        val tokens = listOf(
+            Token(TokenType.PARENTHESES, "("),
+            Token(TokenType.NAME, "add"),
+            Token(TokenType.NUMBER, "1"),
+            Token(TokenType.PARENTHESES, "("),
+            Token(TokenType.NAME, "subtract"),
+            Token(TokenType.NUMBER, "2"),
+            Token(TokenType.NUMBER, "3"),
+            Token(TokenType.PARENTHESES, ")"),
+            Token(TokenType.PARENTHESES, ")"),
+            Token(TokenType.PARENTHESES, "("),
+            Token(TokenType.NAME, "add"),
+            Token(TokenType.NUMBER, "4"),
+            Token(TokenType.PARENTHESES, "("),
+            Token(TokenType.NAME, "add"),
+            Token(TokenType.NUMBER, "5"),
+            Token(TokenType.PARENTHESES, "("),
+            Token(TokenType.NAME, "subtract"),
+            Token(TokenType.NUMBER, "6"),
+            Token(TokenType.NUMBER, "7"),
+            Token(TokenType.PARENTHESES, ")"),
+            Token(TokenType.PARENTHESES, ")"),
+            Token(TokenType.PARENTHESES, ")"),
+        )
+
+        val programNode = parse(tokens)
+
+        assertTrue { programNode.body.size == 2 }
+        assertTrue { programNode.body[0] is CallExpressionNode }
+        assertTrue { programNode.body[1] is CallExpressionNode }
+
+        (programNode.body[0] as CallExpressionNode).apply {
+            assertTrue { name == "add" && params.size == 2 }
+
+            assertTrue { (params[0] as NumericLiteralNode).value == "1" }
+
+            (params[1] as CallExpressionNode).apply {
+                assertTrue { name == "subtract" && params.size == 2 }
+                assertTrue { (params[0] as NumericLiteralNode).value == "2" }
+                assertTrue { (params[1] as NumericLiteralNode).value == "3" }
+            }
+        }
+
+        (programNode.body[1] as CallExpressionNode).apply {
+            assertTrue { name == "add" && params.size == 2 }
+
+            assertTrue { (params[0] as NumericLiteralNode).value == "4" }
+
+            (params[1] as CallExpressionNode).apply {
+                assertTrue { name == "add" && params.size == 2 }
+                assertTrue { (params[0] as NumericLiteralNode).value == "5" }
+                assertTrue { params[1] is CallExpressionNode }
+
+                (params[1] as CallExpressionNode).apply {
+                    assertTrue { (params[0] as NumericLiteralNode).value == "6" }
+                    assertTrue { (params[1] as NumericLiteralNode).value == "7" }
+                }
+            }
+        }
+    }
 }
