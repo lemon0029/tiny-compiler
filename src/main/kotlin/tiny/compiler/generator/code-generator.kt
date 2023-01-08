@@ -2,15 +2,15 @@ package tiny.compiler.generator
 
 import tiny.compiler.parser.*
 
-fun codeGenerator(node: Node): String {
+fun codeGenerate(node: Node): String {
     return when (node) {
-        is ProgramNode -> node.body.joinToString("\n") { codeGenerator(it) }
-        is ExpressionStatementNode -> codeGenerator(node.expression) + ";"
+        is ProgramNode -> node.body.joinToString("\n") { codeGenerate(it) }
+        is ExpressionStatementNode -> codeGenerate(node.expression) + ";"
         is NumericLiteralNode -> node.value
         is IdentifierNode -> node.name
         is CallExpressionNode -> {
-            val functionName = codeGenerator(node.callee!!)
-            val arguments = node.arguments.joinToString(", ") { codeGenerator(it) }
+            val functionName = codeGenerate(node.callee!!)
+            val arguments = node.arguments.joinToString(", ") { codeGenerate(it) }
             "$functionName($arguments)"
         }
         else -> throw IllegalArgumentException("${node.type}")

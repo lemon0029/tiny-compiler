@@ -1,6 +1,6 @@
 package tiny.compiler.generating
 
-import tiny.compiler.generator.codeGenerator
+import tiny.compiler.generator.codeGenerate
 import tiny.compiler.parser.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -20,7 +20,7 @@ class CodeGeneratorSpec {
             })
         }
 
-        val output = codeGenerator(programNode)
+        val output = codeGenerate(programNode)
 
         assertEquals("add(1, subtract(2, 3));", output)
     }
@@ -48,7 +48,7 @@ class CodeGeneratorSpec {
             })
         }
 
-        val output = codeGenerator(programNode)
+        val output = codeGenerate(programNode)
 
         assertEquals("add(1, subtract(2, 3));\nadd(4, add(5, subtract(6, 7)));", output)
     }
