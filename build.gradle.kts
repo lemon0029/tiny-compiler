@@ -12,8 +12,6 @@ repositories {
 }
 
 dependencies {
-    testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
-    testImplementation("org.mockito:mockito-core:4.11.0")
     testImplementation(kotlin("test"))
 }
 
